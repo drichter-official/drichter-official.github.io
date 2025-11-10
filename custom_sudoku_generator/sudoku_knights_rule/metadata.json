@@ -1,0 +1,11 @@
+{
+  "rule": {
+    "name": "Knight's Rule",
+    "description": "No two cells a knight's move apart can contain the same digit",
+    "size": 9,
+    "box_size": 3
+  },
+  "generated_at": "2025-11-10T21:13:44.548777",
+  "size": 9,
+  "box_size": 3
+}

@@ -1,0 +1,11 @@
+{
+  "rule": {
+    "name": "King's Rule",
+    "description": "No adjacent cells (including diagonals) can have the same digit",
+    "size": 9,
+    "box_size": 3
+  },
+  "generated_at": "2025-11-10T21:25:07.129806",
+  "size": 9,
+  "box_size": 3
+}

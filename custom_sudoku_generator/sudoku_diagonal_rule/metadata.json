@@ -1,0 +1,11 @@
+{
+  "rule": {
+    "name": "Diagonal Rule (Sudoku X)",
+    "description": "Main diagonals must contain each digit 1-9 exactly once",
+    "size": 9,
+    "box_size": 3
+  },
+  "generated_at": "2025-11-10T21:19:13.504544",
+  "size": 9,
+  "box_size": 3
+}
