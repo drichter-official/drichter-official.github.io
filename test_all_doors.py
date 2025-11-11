@@ -53,6 +53,6 @@ def test_door_loading(door_number):
         traceback.print_exc()
 
 if __name__ == '__main__':
-    test_door_loading(1)
-    test_door_loading(2)
+    for i in range (1, 25):
+        test_door_loading(i)
 
