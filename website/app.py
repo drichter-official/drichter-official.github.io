@@ -108,10 +108,9 @@ def load_solution(door_number=1):
 
 @app.route('/')
 def calendar():
-    shuffled_doors = list(range(1, 25))
-    random.shuffle(shuffled_doors)
+    doors = list(range(1, 25))
     # Pass list of tuples (door_number, position_class)
-    door_positions = list(zip(shuffled_doors, position_classes))
+    door_positions = list(zip(doors, position_classes))
     return render_template("calendar.html", door_positions=door_positions)
 
 @app.route('/door/<int:door_number>')

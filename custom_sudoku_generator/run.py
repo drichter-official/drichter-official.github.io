@@ -216,10 +216,10 @@ def generate_sudoku_for_rule(rule_folder, difficulty_attempts=None):
     if difficulty_attempts is None:
         # Check if rule is highly restrictive (e.g., non-consecutive)
         if hasattr(custom_rule, 'is_highly_restrictive') and custom_rule.is_highly_restrictive:
-            difficulty_attempts = 2  # Very few attempts for highly restrictive rules
+            difficulty_attempts = 1 # Very few attempts for highly restrictive rules
         # Reverse generation rules have complex constraints - use fewer attempts
         elif custom_rule.supports_reverse_generation():
-            difficulty_attempts = 3  # Fewer attempts for complex rules
+            difficulty_attempts = 5  # Fewer attempts for complex rules
         else:
             difficulty_attempts = 5  # Standard attempts for simple rules
 
@@ -366,7 +366,7 @@ if __name__ == "__main__":
             for row in full_grid:
                 print([num for num in row])
 
-            puzzle = gen.remove_numbers(attempts=5)
+            puzzle = gen.remove_numbers(attempts=1)
             print("\nGenerated puzzle grid:")
             for row in puzzle:
                 print([num for num in row])

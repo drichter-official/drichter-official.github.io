@@ -24,7 +24,7 @@ class NonconsecutiveRule(BaseRule):
 
         # This is a highly restrictive rule - use relaxed mode
         self.is_highly_restrictive = True
-        self.relaxed_mode = True  # Relax constraint to 50% of adjacencies
+        self.relaxed_mode = False  # Relax constraint to 50% of adjacencies
 
     def validate(self, grid, row, col, num):
         """
