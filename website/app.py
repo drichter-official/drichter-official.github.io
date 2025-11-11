@@ -1,10 +1,22 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import random
 import os
 import ast
 import sys
 
 app = Flask(__name__)
+
+# Error handler for all exceptions on /generate routes
+@app.errorhandler(Exception)
+def handle_error(e):
+    # Only return JSON for API routes
+    if '/generate/' in request.path:
+        return jsonify({
+            'success': False,
+            'message': f'Server error: {str(e)}'
+        }), 500
+    # For other routes, let Flask handle it normally
+    raise e
 
 # Add the custom_sudoku_generator to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'custom_sudoku_generator'))
@@ -77,12 +89,40 @@ def door(door_number):
 def generate_puzzle(door_number):
     """Generate a new sudoku puzzle for the specified door."""
     try:
-        from run import generate_sudoku_for_rule
-
+        # Check if we have write permissions
         rule_folder = get_rule_folder(door_number)
+
+        # Ensure the rule folder exists
+        if not os.path.exists(rule_folder):
+            return jsonify({
+                'success': False,
+                'message': f'Rule folder not found: {rule_folder}'
+            }), 404
+
+        # Check write permissions by trying to create a test file
+        test_file = os.path.join(rule_folder, '.write_test')
+        try:
+            with open(test_file, 'w') as f:
+                f.write('test')
+            os.remove(test_file)
+        except (IOError, OSError) as e:
+            return jsonify({
+                'success': False,
+                'message': f'No write permission in rule folder. Please check file permissions on the server.'
+            }), 403
+
+        # Import the generation function
+        try:
+            from run import generate_sudoku_for_rule
+        except ImportError as e:
+            return jsonify({
+                'success': False,
+                'message': f'Could not import generation module: {str(e)}'
+            }), 500
 
         # Generate new puzzle
         print(f"Generating new puzzle for door {door_number}...")
+        print(f"Rule folder: {rule_folder}")
         puzzle_grid, solution_grid = generate_sudoku_for_rule(rule_folder)
 
         return jsonify({
@@ -93,9 +133,15 @@ def generate_puzzle(door_number):
         print(f"Error generating puzzle: {e}")
         import traceback
         traceback.print_exc()
+
+        # Return a proper JSON error response
+        error_message = str(e)
+        if len(error_message) > 200:
+            error_message = error_message[:200] + '...'
+
         return jsonify({
             'success': False,
-            'message': f'Error generating puzzle: {str(e)}'
+            'message': f'Error: {error_message}'
         }), 500
 
 if __name__ == "__main__":

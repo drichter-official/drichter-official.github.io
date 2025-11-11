@@ -316,7 +316,14 @@
 
             // Call the Flask route to generate a new puzzle
             fetch(`/generate/${doorNumber}`)
-                .then(response => response.json())
+                .then(response => {
+                    // Check if response is JSON
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        throw new Error('Server returned non-JSON response. This may be a permissions issue on the server.');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
                         messageDiv.innerHTML = '<span style="color: #4CAF50;">✓ ' + data.message + ' Reloading...</span>';
@@ -331,6 +338,7 @@
                     }
                 })
                 .catch(error => {
+                    console.error('Generation error:', error);
                     messageDiv.innerHTML = '<span style="color: #f44336;">✗ Error: ' + error.message + '</span>';
                     button.disabled = false;
                     button.textContent = 'Generate New Puzzle';
