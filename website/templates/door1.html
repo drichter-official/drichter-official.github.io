@@ -147,7 +147,7 @@
 <body>
     <h1>Day {{ door }} - Interactive Sudoku Puzzle</h1>
     <p style="text-align: center;">Fill in the empty cells with numbers 1-9. Each row, column, and 3x3 box must contain all digits from 1 to 9.</p>
-    
+
     <div class="sudoku-container">
         <table class="sudoku" id="sudokuGrid">
             {% for i in range(9) %}
@@ -165,22 +165,24 @@
             {% endfor %}
         </table>
     </div>
-    
+
     <div class="controls">
         <button onclick="checkSolution()">Check Solution</button>
         <button onclick="clearAll()" class="secondary">Clear All</button>
         <button onclick="resetBoard()" class="secondary">Reset</button>
+        <button onclick="generateNewPuzzle()" class="secondary">Generate New Puzzle</button>
     </div>
-    
+
     <div id="message"></div>
-    
+    <div id="generation-message" style="text-align: center; margin: 10px 0; padding: 10px; font-size: 1rem;"></div>
+
     <a href="/" class="back-link">← Back to Calendar</a>
 
     <script>
         // Store the solution
         const solution = {{ solution | tojson }};
         const initialPuzzle = {{ sudoku | tojson }};
-        
+
         // Only allow numbers 1-9
         document.querySelectorAll('.sudoku input').forEach(input => {
             input.addEventListener('input', function(e) {
@@ -207,7 +209,7 @@
                 const col = parseInt(e.target.dataset.col);
                 let newRow = row;
                 let newCol = col;
-                
+
                 switch(e.key) {
                     case 'ArrowUp':
                         e.preventDefault();
@@ -227,7 +229,7 @@
                         newCol = col < 8 ? col + 1 : col;
                         break;
                 }
-                
+
                 if (newRow !== row || newCol !== col) {
                     const nextInput = document.querySelector(`input[data-row="${newRow}"][data-col="${newCol}"]`);
                     if (nextInput) {
@@ -237,7 +239,7 @@
                 }
             });
         });
-        
+
         // Add click listeners to prefilled cells
         document.querySelectorAll('.sudoku td.prefilled').forEach(cell => {
             cell.addEventListener('click', function(e) {
@@ -257,21 +259,21 @@
             let allCorrect = true;
             let allFilled = true;
             const inputs = document.querySelectorAll('.sudoku input');
-            
+
             inputs.forEach(input => {
                 const row = parseInt(input.dataset.row);
                 const col = parseInt(input.dataset.col);
                 const value = input.value;
                 const cell = input.parentElement;
-                
+
                 // Remove previous styling
                 cell.classList.remove('correct', 'incorrect');
-                
+
                 if (!value) {
                     allFilled = false;
                     return;
                 }
-                
+
                 if (parseInt(value) === solution[row][col]) {
                     cell.classList.add('correct');
                 } else {
@@ -279,7 +281,7 @@
                     allCorrect = false;
                 }
             });
-            
+
             const messageDiv = document.getElementById('message');
             if (!allFilled) {
                 messageDiv.innerHTML = '<span class="error">Please fill in all cells first!</span>';
@@ -289,7 +291,7 @@
                 messageDiv.innerHTML = '<span class="error">Some cells are incorrect. Keep trying!</span>';
             }
         }
-        
+
         function clearAll() {
             document.querySelectorAll('.sudoku input').forEach(input => {
                 input.value = '';
@@ -297,9 +299,42 @@
             });
             document.getElementById('message').innerHTML = '';
         }
-        
+
         function resetBoard() {
             clearAll();
+        }
+
+        function generateNewPuzzle() {
+            const messageDiv = document.getElementById('generation-message');
+            const doorNumber = {{ door }};
+
+            // Disable button and show loading message
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = 'Generating...';
+            messageDiv.innerHTML = '<span style="color: #2196F3;">Generating new puzzle... This may take a moment.</span>';
+
+            // Call the Flask route to generate a new puzzle
+            fetch(`/generate/${doorNumber}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        messageDiv.innerHTML = '<span style="color: #4CAF50;">✓ ' + data.message + ' Reloading...</span>';
+                        // Reload the page after a short delay to show the new puzzle
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    } else {
+                        messageDiv.innerHTML = '<span style="color: #f44336;">✗ ' + data.message + '</span>';
+                        button.disabled = false;
+                        button.textContent = 'Generate New Puzzle';
+                    }
+                })
+                .catch(error => {
+                    messageDiv.innerHTML = '<span style="color: #f44336;">✗ Error: ' + error.message + '</span>';
+                    button.disabled = false;
+                    button.textContent = 'Generate New Puzzle';
+                });
         }
 
         function highlightSameNumbersAndRowCol(selectedCell, number) {

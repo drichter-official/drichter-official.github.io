@@ -20,15 +20,10 @@ Rules like Jigsaw Sudoku can now properly **replace** standard 3x3 boxes with cu
 ### 3. Enhanced Metadata
 All rules now export comprehensive metadata including regions, lines, cages, and constraints for visualization.
 
-📖 See [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)
-
 ## 📚 Documentation
 
-- **[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)** - Quick reference for adding new rules
 - **[REVERSE_GENERATION.md](REVERSE_GENERATION.md)** - Detailed guide to reverse generation
 - **[STANDARD_BOX_OVERRIDE.md](STANDARD_BOX_OVERRIDE.md)** - Standard box override feature
-- **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** - Recent changes and performance metrics
-- **[QUICKSTART.md](QUICKSTART.md)** - Getting started guide
 - **[VARIANTS.md](VARIANTS.md)** - Available Sudoku variants
 
 ## Structure
