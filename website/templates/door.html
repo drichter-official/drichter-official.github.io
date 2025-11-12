@@ -71,51 +71,86 @@
             outline: none;
             background-color: #fffef0;
         }
+
+        /* Layer 1: Base background - LOWEST PRIORITY */
+        /* Default input background is set above */
+
+        /* Layer 2: Prefilled cells - overrides background, borders show through */
         .sudoku td.prefilled {
             background-color: #e8e8e8;
             color: #000;
         }
+
+        /* Layer 3: Special field colors - override prefilled cells, borders show through */
         .sudoku td.diagonal-cell {
             background-color: #e8f4f8 !important;
-        }
-        .sudoku td.diagonal-cell input {
-            background-color: transparent;
         }
         .sudoku td.windoku-cell {
             background-color: #e3f2fd !important;
         }
-        .sudoku td.windoku-cell input {
-            background-color: transparent;
-        }
         .sudoku td.asterisk-cell {
             background-color: #fff9c4 !important;
-        }
-        .sudoku td.asterisk-cell input {
-            background-color: transparent;
         }
         .sudoku td.even-cell {
             background-color: #c8e6c9 !important;
         }
-        .sudoku td.even-cell input {
-            background-color: transparent;
-        }
         .sudoku td.odd-cell {
             background-color: #ffccbc !important;
-        }
-        .sudoku td.odd-cell input {
-            background-color: transparent;
         }
         .sudoku td.magic-square-cell {
             background-color: #f3e5f5 !important;
         }
-        .sudoku td.magic-square-cell input {
-            background-color: transparent;
-        }
         .sudoku td.center-dot-cell {
             background-color: #ffe0b2 !important;
         }
-        .sudoku td.center-dot-cell input {
-            background-color: transparent;
+        .sudoku td.thermo-cell {
+            background-color: #e1f5fe !important;
+        }
+        .sudoku td.arrow-circle {
+            background-color: #fff9c4 !important;
+            border-radius: 50%;
+        }
+        .sudoku td.arrow-cell {
+            background-color: #fffde7 !important;
+        }
+        .sudoku td.renban-cell {
+            background-color: #f3e5f5 !important;
+        }
+        .sudoku td.jigsaw-region-0 {
+            background-color: #ffebee !important;
+        }
+        .sudoku td.jigsaw-region-1 {
+            background-color: #e8f5e9 !important;
+        }
+        .sudoku td.jigsaw-region-2 {
+            background-color: #e3f2fd !important;
+        }
+        .sudoku td.jigsaw-region-3 {
+            background-color: #fff3e0 !important;
+        }
+        .sudoku td.jigsaw-region-4 {
+            background-color: #f3e5f5 !important;
+        }
+        .sudoku td.jigsaw-region-5 {
+            background-color: #fce4ec !important;
+        }
+        .sudoku td.jigsaw-region-6 {
+            background-color: #e0f2f1 !important;
+        }
+        .sudoku td.jigsaw-region-7 {
+            background-color: #fff9c4 !important;
+        }
+        .sudoku td.jigsaw-region-8 {
+            background-color: #e1f5fe !important;
+        }
+        .sudoku td.whisper-cell {
+            background-color: #e1bee7 !important;
+        }
+        .sudoku td.chain-corner-cell {
+            background-color: #ffecb3 !important;
+        }
+        .sudoku td.consecutive-cell {
+            background-color: #c5e1a5 !important;
         }
         .sudoku td.killer-cage {
             position: relative;
@@ -129,87 +164,49 @@
             left: 2px;
             font-weight: normal;
         }
-        .sudoku td.thermo-cell {
-            background-color: #e1f5fe !important;
-        }
-        .sudoku td.thermo-cell input {
-            background-color: transparent;
-        }
-        .sudoku td.arrow-circle {
-            background-color: #fff9c4 !important;
-            border-radius: 50%;
-        }
-        .sudoku td.arrow-circle input {
-            background-color: transparent;
-        }
-        .sudoku td.arrow-cell {
-            background-color: #fffde7 !important;
-        }
-        .sudoku td.arrow-cell input {
-            background-color: transparent;
-        }
-        .sudoku td.renban-cell {
-            background-color: #f3e5f5 !important;
-        }
-        .sudoku td.renban-cell input {
-            background-color: transparent;
-        }
-        .sudoku td.jigsaw-region-0 { background-color: #ffebee !important; }
-        .sudoku td.jigsaw-region-1 { background-color: #e8f5e9 !important; }
-        .sudoku td.jigsaw-region-2 { background-color: #e3f2fd !important; }
-        .sudoku td.jigsaw-region-3 { background-color: #fff3e0 !important; }
-        .sudoku td.jigsaw-region-4 { background-color: #f3e5f5 !important; }
-        .sudoku td.jigsaw-region-5 { background-color: #fce4ec !important; }
-        .sudoku td.jigsaw-region-6 { background-color: #e0f2f1 !important; }
-        .sudoku td.jigsaw-region-7 { background-color: #fff9c4 !important; }
-        .sudoku td.jigsaw-region-8 { background-color: #e1f5fe !important; }
-        .sudoku td.whisper-cell {
-            background-color: #e1bee7 !important;
-        }
-        .sudoku td.whisper-cell input {
-            background-color: transparent;
-        }
-        .sudoku td.chain-corner-cell {
-            background-color: #ffecb3 !important;
-        }
-        .sudoku td.chain-corner-cell input {
-            background-color: transparent;
-        }
-        .sudoku td.consecutive-cell {
-            background-color: #c5e1a5 !important;
-        }
+
+        /* Make all special field inputs transparent so background shows through */
+        .sudoku td.diagonal-cell input,
+        .sudoku td.windoku-cell input,
+        .sudoku td.asterisk-cell input,
+        .sudoku td.even-cell input,
+        .sudoku td.odd-cell input,
+        .sudoku td.magic-square-cell input,
+        .sudoku td.center-dot-cell input,
+        .sudoku td.thermo-cell input,
+        .sudoku td.arrow-circle input,
+        .sudoku td.arrow-cell input,
+        .sudoku td.renban-cell input,
+        .sudoku td.whisper-cell input,
+        .sudoku td.chain-corner-cell input,
         .sudoku td.consecutive-cell input {
             background-color: transparent;
         }
-        /* Row/column highlight - lowest priority */
+        /* Layer 4: Interactive highlights - override special field colors */
         .sudoku td.rowcol-highlight {
             background-color: #e3f2fd !important; /* very light blue for row/col */
         }
-        /* Number highlights - override row/col highlight */
         .sudoku td.highlighted-user {
-            background-color: #ce93d8 !important; /* bright yellow for user-filled */
+            background-color: #ce93d8 !important; /* purple for user-filled same number */
         }
         .sudoku td.highlighted-prefilled {
-            background-color: #b995f0 !important; /* bright purple for prefilled */
+            background-color: #b995f0 !important; /* darker purple for prefilled same number */
         }
-        /* Selected cell outline */
+        .sudoku td.rowcol-highlight input,
+        .sudoku td.highlighted-user input,
+        .sudoku td.highlighted-prefilled input {
+            background-color: transparent;
+        }
+
+        /* Selected cell outline - doesn't change background */
         .sudoku td.selected-cell {
             outline: 3px solid #1565c0;
             outline-offset: -3px;
             z-index: 10;
             position: relative;
         }
-        /* Ensure input backgrounds inherit from parent td */
-        .sudoku td.rowcol-highlight input {
-            background-color: transparent;
-        }
-        .sudoku td.highlighted-user input {
-            background-color: transparent;
-        }
-        .sudoku td.highlighted-prefilled input {
-            background-color: transparent;
-        }
-        /* Validation colors - highest priority */
+
+        /* Layer 5: Validation colors - HIGHEST PRIORITY - override everything */
         .sudoku td.correct {
             background-color: #a5d6a7 !important;
         }
