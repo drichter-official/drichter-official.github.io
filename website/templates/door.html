@@ -19,11 +19,12 @@
             justify-content: center;
             margin: 20px 0;
         }
-        .sudoku {
-            border-collapse: collapse;
+                .sudoku {
+            border-collapse: separate;
+            border-spacing: 0;
             background-color: white;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border: 3px solid #000;
+            border: 3px solid #000;        /* Thick outer border */
         }
         .sudoku td {
             width: 50px;
@@ -32,34 +33,37 @@
             font-size: 1.3rem;
             font-weight: bold;
             position: relative;
-            border: none;
             box-sizing: border-box;
-        }
-        /* Top borders - thin by default */
-        .sudoku td {
-            border-top: 1px solid #bbb;
-        }
-        /* Left borders - thin by default */
-        .sudoku td {
+            border-top: 1px solid #bbb;        /* Thin default grid line */
             border-left: 1px solid #bbb;
+            border-right: 0;
+            border-bottom: 0;
         }
-        /* First row gets no top border (outer border handles it) */
+        /* Remove top border for first row (leave for table) */
         .sudoku tr:first-child td {
             border-top: none;
         }
-        /* First column gets no left border (outer border handles it) */
+        /* Remove left border for first column (leave for table) */
         .sudoku td:first-child {
             border-left: none;
         }
-        /* Thick top borders after rows 3 and 6 (i.e., on rows 4 and 7) */
+        /* Thick top borders after rows 3 and 6 (for box separators) */
         .sudoku tr:nth-child(4) td,
         .sudoku tr:nth-child(7) td {
             border-top: 2px solid #000;
         }
-        /* Thick left borders on columns 4 and 7 */
+        /* Thick left borders after columns 3 and 6 (for box separators) */
         .sudoku td:nth-child(4),
         .sudoku td:nth-child(7) {
             border-left: 2px solid #000;
+        }
+        /* No bottom border for last row (table border only) */
+        .sudoku tr:last-child td {
+            border-bottom: none;
+        }
+        /* No right border for last column (table border only) */
+        .sudoku td:last-child {
+            border-right: none;
         }
         .sudoku td input {
             width: 100%;
@@ -78,84 +82,109 @@
         /* Layer 2: Prefilled cells - overrides background, borders show through */
         .sudoku td.prefilled {
             background-color: #e8e8e8;
-            color: #000;
+            color: inherit;
         }
 
         /* Layer 3: Special field colors - override prefilled cells, borders show through */
         .sudoku td.diagonal-cell {
             background-color: #e8f4f8 !important;
+            color: inherit;
         }
         .sudoku td.windoku-cell {
             background-color: #e3f2fd !important;
+            color: inherit;
         }
         .sudoku td.asterisk-cell {
             background-color: #fff9c4 !important;
+            color: inherit;
         }
         .sudoku td.even-cell {
             background-color: #c8e6c9 !important;
+            color: inherit;
         }
         .sudoku td.odd-cell {
             background-color: #ffccbc !important;
+            color: inherit;
         }
         .sudoku td.magic-square-cell {
             background-color: #f3e5f5 !important;
+            color: inherit;
         }
         .sudoku td.center-dot-cell {
             background-color: #ffe0b2 !important;
+            color: inherit;
         }
         .sudoku td.thermo-cell {
             background-color: #e1f5fe !important;
+            color: inherit;
         }
         .sudoku td.arrow-circle {
             background-color: #fff9c4 !important;
+            color: inherit;
             border-radius: 50%;
         }
         .sudoku td.arrow-cell {
             background-color: #fffde7 !important;
+            color: inherit;
         }
         .sudoku td.renban-cell {
             background-color: #f3e5f5 !important;
+            color: inherit;
         }
         .sudoku td.jigsaw-region-0 {
             background-color: #ffebee !important;
+            color: inherit;
         }
         .sudoku td.jigsaw-region-1 {
             background-color: #e8f5e9 !important;
+            color: inherit;
         }
         .sudoku td.jigsaw-region-2 {
             background-color: #e3f2fd !important;
+            color: inherit;
         }
         .sudoku td.jigsaw-region-3 {
             background-color: #fff3e0 !important;
+            color: inherit;
         }
         .sudoku td.jigsaw-region-4 {
             background-color: #f3e5f5 !important;
+            color: inherit;
         }
         .sudoku td.jigsaw-region-5 {
             background-color: #fce4ec !important;
+            color: inherit;
         }
         .sudoku td.jigsaw-region-6 {
             background-color: #e0f2f1 !important;
+            color: inherit;
         }
         .sudoku td.jigsaw-region-7 {
             background-color: #fff9c4 !important;
+            color: inherit;
         }
         .sudoku td.jigsaw-region-8 {
             background-color: #e1f5fe !important;
+            color: inherit;
         }
         .sudoku td.whisper-cell {
             background-color: #e1bee7 !important;
+            color: inherit;
         }
         .sudoku td.chain-corner-cell {
             background-color: #ffecb3 !important;
+            color: inherit;
         }
         .sudoku td.consecutive-cell {
             background-color: #c5e1a5 !important;
+            color: inherit;
         }
         .sudoku td.killer-cage {
-            position: relative;
-            border: 2px dashed #9c27b0 !important;
+            border-style: dashed;
+            border-width: 2px;
+            border-color: #9c27b0 !important;
         }
+
         .sudoku td.cage-sum {
             font-size: 0.7rem;
             color: #9c27b0;
@@ -185,12 +214,15 @@
         /* Layer 4: Interactive highlights - override special field colors */
         .sudoku td.rowcol-highlight {
             background-color: #e3f2fd !important; /* very light blue for row/col */
+            color: inherit;
         }
         .sudoku td.highlighted-user {
             background-color: #ce93d8 !important; /* purple for user-filled same number */
+            color: inherit;
         }
         .sudoku td.highlighted-prefilled {
             background-color: #b995f0 !important; /* darker purple for prefilled same number */
+            color: inherit;
         }
         .sudoku td.rowcol-highlight input,
         .sudoku td.highlighted-user input,
@@ -209,12 +241,14 @@
         /* Layer 5: Validation colors - HIGHEST PRIORITY - override everything */
         .sudoku td.correct {
             background-color: #a5d6a7 !important;
+            color: inherit;
         }
         .sudoku td.correct input {
             background-color: transparent;
         }
         .sudoku td.incorrect {
             background-color: #ef9a9a !important;
+            color: inherit;
         }
         .sudoku td.incorrect input {
             background-color: transparent;
@@ -312,20 +346,20 @@
         // Apply special cell highlighting based on metadata
         function applySpecialCellHighlighting() {
             const rule = metadata.rule;
-            
+
             // Diagonal cells (Diagonal Rule)
             if (rule.name && rule.name.includes('Diagonal')) {
                 for (let i = 0; i < 9; i++) {
                     // Main diagonal
                     const cell1 = document.querySelector(`td[data-row="${i}"][data-col="${i}"]`);
                     if (cell1) cell1.classList.add('diagonal-cell');
-                    
+
                     // Anti-diagonal
                     const cell2 = document.querySelector(`td[data-row="${i}"][data-col="${8-i}"]`);
                     if (cell2) cell2.classList.add('diagonal-cell');
                 }
             }
-            
+
             // Windoku regions
             if (rule.windoku_regions) {
                 rule.windoku_regions.forEach(region => {
@@ -335,7 +369,7 @@
                     });
                 });
             }
-            
+
             // Asterisk cells
             if (rule.asterisk_cells) {
                 rule.asterisk_cells.forEach(([row, col]) => {
@@ -343,7 +377,7 @@
                     if (cell) cell.classList.add('asterisk-cell');
                 });
             }
-            
+
             // Even cells
             if (rule.even_cells) {
                 rule.even_cells.forEach(([row, col]) => {
@@ -351,7 +385,7 @@
                     if (cell) cell.classList.add('even-cell');
                 });
             }
-            
+
             // Odd cells
             if (rule.odd_cells) {
                 rule.odd_cells.forEach(([row, col]) => {
