@@ -1,7 +1,7 @@
 {
   "rule": {
     "name": "Magic Square Sudoku",
-    "description": "Center 3x3 box highlighted (magic square visualization)",
+    "description": "Center 3x3 box forms a magic square (all rows, columns, diagonals sum to 15)",
     "size": 9,
     "box_size": 3,
     "magic_box_location": {
@@ -17,10 +17,26 @@
       ],
       "target_sum": 15
     },
-    "note": "Magic square constraint disabled for practical generation - center box highlighted for visualization",
-    "generation_mode": "reverse"
+    "magic_square": [
+      [
+        6,
+        7,
+        2
+      ],
+      [
+        1,
+        5,
+        9
+      ],
+      [
+        8,
+        3,
+        4
+      ]
+    ],
+    "generation_mode": "forward_with_prefill"
   },
-  "generated_at": "2025-11-11T21:42:38.619349",
+  "generated_at": "2025-11-13T16:56:36.289218",
   "size": 9,
   "box_size": 3
 }

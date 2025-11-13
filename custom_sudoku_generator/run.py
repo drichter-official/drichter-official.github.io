@@ -58,6 +58,13 @@ class SudokuGenerator:
 
     def generate_full_grid(self):
         self.grid = [[0]*self.size for _ in range(self.size)]
+
+        # Check if the rule supports pre-filling (e.g., magic square)
+        if hasattr(self.custom_rule_instance, 'pre_fill_grid'):
+            success = self.custom_rule_instance.pre_fill_grid(self.grid)
+            if not success:
+                print("Warning: Pre-fill failed, but continuing anyway...")
+
         self._fill_grid(self.grid)
         return self.grid
 
