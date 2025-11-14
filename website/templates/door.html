@@ -18,6 +18,7 @@
             display: flex;
             justify-content: center;
             margin: 20px 0;
+            position: relative;
         }
         .sudoku {
             border-collapse: separate;
@@ -25,6 +26,13 @@
             background-color: white;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             border: 3px solid #000000 !important;        /* Thick outer border */
+        }
+        .diagonal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
         }
         .sudoku td {
             width: 50px;
@@ -195,10 +203,10 @@
             background-color: #c5e1a5 !important;
             color: inherit;
         }
-        .sudoku td.argyle-cell {
+        /*.sudoku td.argyle-cell {
             background-color: #d1c4e9 !important;
             color: inherit;
-        }
+        }*/
         .sudoku td.star-cell {
             background-color: #fff59d !important;
             color: inherit;
@@ -233,7 +241,6 @@
         .sudoku td.whisper-cell input,
         .sudoku td.chain-corner-cell input,
         .sudoku td.consecutive-cell input,
-        .sudoku td.argyle-cell input,
         .sudoku td.star-cell input,
         .sudoku td.jigsaw-region-0 input,
         .sudoku td.jigsaw-region-1 input,
@@ -346,6 +353,7 @@
     <p style="text-align: center;">{{ metadata.rule.description }}</p>
 
     <div class="sudoku-container">
+        <svg class="diagonal-overlay" id="diagonalOverlay"></svg>
         <table class="sudoku" id="sudokuGrid">
             {% for i in range(9) %}
             <tr>
@@ -646,9 +654,89 @@
             }
         }
 
+        // Draw argyle diagonal lines
+        function drawArgyleDiagonals() {
+            const rule = metadata.rule;
+            if (!rule.argyle_diagonals) return;
+
+            const svg = document.getElementById('diagonalOverlay');
+            const table = document.getElementById('sudokuGrid');
+
+            // Get table dimensions
+            const tableRect = table.getBoundingClientRect();
+            const containerRect = table.parentElement.getBoundingClientRect();
+
+            // Set SVG dimensions to match table
+            svg.setAttribute('width', tableRect.width);
+            svg.setAttribute('height', tableRect.height);
+            svg.style.width = tableRect.width + 'px';
+            svg.style.height = tableRect.height + 'px';
+            svg.style.left = (tableRect.left - containerRect.left) + 'px';
+            svg.style.top = (tableRect.top - containerRect.top) + 'px';
+
+            const cellSize = 50; // Cell size from CSS
+            const borderWidth = 3; // Table border width
+
+            // Helper function to get cell center coordinates
+            function getCellCenter(row, col) {
+                // Account for different border widths
+                let x = borderWidth + col * cellSize;
+                let y = borderWidth + row * cellSize;
+
+                // Add thicker borders after columns 3 and 6
+                if (col >= 3) x += 1;
+                if (col >= 6) x += 1;
+
+                // Add thicker borders after rows 3 and 6
+                if (row >= 3) y += 1;
+                if (row >= 6) y += 1;
+
+                // Add half cell size to get center
+                x += cellSize / 2;
+                y += cellSize / 2;
+
+                return { x, y };
+            }
+
+            // Color palette for different diagonals
+            const colors = ['#FF4F4F7C', '#FF4F4F7C', '#FF4F4F7C', '#FF4F4F7C'];
+
+            // Draw each diagonal
+            rule.argyle_diagonals.forEach((diagonal, index) => {
+                const color = colors[index % colors.length];
+
+                // Create a path for this diagonal
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+
+                // Build path data
+                let pathData = '';
+                diagonal.forEach((cell, cellIndex) => {
+                    const [row, col] = cell;
+                    const center = getCellCenter(row, col);
+
+                    if (cellIndex === 0) {
+                        pathData += `M ${center.x} ${center.y}`;
+                    } else {
+                        pathData += ` L ${center.x} ${center.y}`;
+                    }
+                });
+
+                path.setAttribute('d', pathData);
+                path.setAttribute('stroke', color);
+                path.setAttribute('stroke-width', '3');
+                path.setAttribute('stroke-opacity', '0.6');
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke-linecap', 'round');
+                path.setAttribute('stroke-linejoin', 'round');
+
+                svg.appendChild(path);
+            });
+        }
+
         // Apply highlighting when page loads
         document.addEventListener('DOMContentLoaded', function() {
             applySpecialCellHighlighting();
+            drawArgyleDiagonals();
         });
 
         // Only allow numbers 1-9

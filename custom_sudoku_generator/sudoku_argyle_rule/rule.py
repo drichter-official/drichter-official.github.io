@@ -11,37 +11,54 @@ from base_rule import BaseRule
 
 class ArgyleRule(BaseRule):
     """
-    Argyle Sudoku: Diagonals of 3x3 boxes must not contain repeated digits.
-    Each 3x3 box has two main diagonals that cannot have repeated values.
+    Argyle Sudoku: No repeated digits on 8 offset diagonals that form an argyle pattern.
+    The diagonals are offset to create a diamond/argyle pattern across the grid.
     """
 
     def __init__(self, size=9, box_size=3):
         super().__init__(size, box_size)
         self.name = "Argyle Sudoku"
-        self.description = "Diagonals of 3x3 boxes must not contain repeated digits"
+        self.description = ("No repeated digits on marked diagonals")
+
+        # Define the 8 argyle diagonals
+        # 4 diagonals going down-right (/)
+        self.argyle_diagonals = [
+            # Down-right diagonals starting from column 1, 3, 5, 7
+            [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 7), (7, 8)],  # col 1
+            [(1, 0), (2, 1), (3, 2), (4, 3), (5, 4), (6, 5), (7, 6), (8, 7)],  # col -1
+            #[(0, 4), (1, 5), (2, 6), (3, 7), (4, 8)],  # col 5
+            #[(4, 0), (5, 1), (6, 2), (7, 3), (8, 4)],  # col -5
+
+            # Down-left diagonals (\) starting from column 7, 5, 3, 1
+            [(0, 7), (1, 6), (2, 5), (3, 4), (4, 3), (5, 2), (6, 1), (7, 0)],  # col 7
+            [(1, 8), (2, 7), (3, 6), (4, 5), (5, 4), (6, 3), (7, 2), (8, 1)],  # col -7
+            #[(0, 4), (1, 3), (2, 2), (3, 1), (4, 0)],  # col 3
+            #[(4, 8), (5, 7), (6, 6), (7, 5), (8, 4)],  # col 1
+        ]
+
+        # Create a mapping from (row, col) to list of diagonal indices
+        self.cell_to_diagonals = {}
+        for diag_idx, diagonal in enumerate(self.argyle_diagonals):
+            for cell in diagonal:
+                if cell not in self.cell_to_diagonals:
+                    self.cell_to_diagonals[cell] = []
+                self.cell_to_diagonals[cell].append(diag_idx)
 
     def validate(self, grid, row, col, num):
         """
         Check if placing 'num' at (row, col) violates the argyle rule.
         """
-        # Determine which 3x3 box this cell belongs to
-        box_row = (row // self.box_size) * self.box_size
-        box_col = (col // self.box_size) * self.box_size
-        
-        # Position within the box
-        in_box_row = row - box_row
-        in_box_col = col - box_col
-        
-        # Check main diagonal of the box (top-left to bottom-right)
-        if in_box_row == in_box_col:
-            for i in range(self.box_size):
-                if grid[box_row + i][box_col + i] == num:
-                    return False
-        
-        # Check anti-diagonal of the box (top-right to bottom-left)
-        if in_box_row + in_box_col == self.box_size - 1:
-            for i in range(self.box_size):
-                if grid[box_row + i][box_col + (self.box_size - 1 - i)] == num:
+        cell = (row, col)
+
+        # If this cell is not on any argyle diagonal, no constraint
+        if cell not in self.cell_to_diagonals:
+            return True
+
+        # Check each diagonal this cell belongs to
+        for diag_idx in self.cell_to_diagonals[cell]:
+            diagonal = self.argyle_diagonals[diag_idx]
+            for r, c in diagonal:
+                if grid[r][c] == num:
                     return False
         
         return True
@@ -50,23 +67,10 @@ class ArgyleRule(BaseRule):
         """Return metadata including argyle diagonal cells."""
         metadata = super().get_metadata()
         
-        # Calculate all argyle diagonal cells (diagonals of each 3x3 box)
-        argyle_cells = []
-        for box_row in range(3):
-            for box_col in range(3):
-                box_start_row = box_row * 3
-                box_start_col = box_col * 3
-                
-                # Main diagonal of this box
-                for i in range(3):
-                    argyle_cells.append((box_start_row + i, box_start_col + i))
-                
-                # Anti-diagonal of this box
-                for i in range(3):
-                    argyle_cells.append((box_start_row + i, box_start_col + (2 - i)))
-        
-        # Remove duplicates (center cells are counted twice)
-        metadata['argyle_cells'] = list(set(argyle_cells))
+        # All cells that are part of any argyle diagonal
+        argyle_cells = list(self.cell_to_diagonals.keys())
+        metadata['argyle_cells'] = argyle_cells
+        metadata['argyle_diagonals'] = self.argyle_diagonals
         return metadata
 
 
