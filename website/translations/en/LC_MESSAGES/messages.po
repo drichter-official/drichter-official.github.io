@@ -20,53 +20,53 @@ msgstr ""
 
 #: website/templates/calendar.html:4 website/templates/calendar.html:128
 msgid "Advent Calendar"
-msgstr ""
+msgstr "Advent Calendar"
 
 #: website/templates/door.html:4
 msgid "Door"
-msgstr ""
+msgstr "Door"
 
 #: website/templates/door.html:4
 msgid "Interactive Sudoku"
-msgstr ""
+msgstr "Interactive Sudoku"
 
 #: website/templates/door.html:586
 msgid "Day"
-msgstr ""
+msgstr "Day"
 
 #: website/templates/door.html:615
 msgid "Highlights"
-msgstr ""
+msgstr "Highlights"
 
 #: website/templates/door.html:618
 msgid "Row/Column"
-msgstr ""
+msgstr "Row/Column"
 
 #: website/templates/door.html:622
 msgid "Same Number"
-msgstr ""
+msgstr "Same Number"
 
 #: website/templates/door.html:628
 msgid "Notes Mode"
-msgstr ""
+msgstr "Notes Mode"
 
 #: website/templates/door.html:631
 msgid "Check Solution"
-msgstr ""
+msgstr "Check Solution"
 
 #: website/templates/door.html:632
 msgid "Undo"
-msgstr ""
+msgstr "Undo"
 
 #: website/templates/door.html:633
 msgid "Reset"
-msgstr ""
+msgstr "Reset"
 
 #: website/templates/door.html:634
 msgid "Generate New Puzzle"
-msgstr ""
+msgstr "Generate New Puzzle"
 
 #: website/templates/door.html:640
 msgid "Back to Calendar"
-msgstr ""
+msgstr "Back to Calendar"
 

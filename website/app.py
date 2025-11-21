@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, request, session
-from flask_babel import Babel, gettext, lazy_gettext
+from flask_babel import Babel
 import random
 import os
 import ast
@@ -10,15 +10,13 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-i
 app.config['BABEL_DEFAULT_LOCALE'] = 'de'
 app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'de']
 
-babel = Babel(app)
-
 def get_locale():
     # Try to get locale from session first, then from request
     if 'language' in session:
         return session['language']
     return request.accept_languages.best_match(app.config['BABEL_SUPPORTED_LOCALES']) or 'de'
 
-babel.init_app(app, locale_selector=get_locale)
+babel = Babel(app, locale_selector=get_locale)
 
 # Error handler for all exceptions on /generate routes
 @app.errorhandler(Exception)
